@@ -1,0 +1,12 @@
+Computer Science II
+CPS209
+Learn how to write complex programs!
+3Lec 2Lab
+Computer Graphics
+CPS511
+Learn how to write cool graphics programs
+3Lec
+Virtual Reality
+CPS643
+Learn how to write extremely cool virtual reality programs
+3Lec 2Lab
