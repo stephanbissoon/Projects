@@ -2,54 +2,57 @@ import java.util.*;
 import java.io.*;
 
 /**
-* This class is the registry that holds all students and courses that are currently in the university.
+* This class is the registry that holds all students and courses that are enrolled in the university.
 * @author Rajiv Bissoon 500954799
 */
 
 public class Registry
 {
-   private ArrayList<Student>      students = new ArrayList<Student>();
-   private ArrayList<ActiveCourse> courses  = new ArrayList<ActiveCourse>();
+   private TreeMap<String, Student>      students = new TreeMap<String, Student>();
+   private TreeMap<String, ActiveCourse> courses  = new TreeMap<String, ActiveCourse>();
+   private Scheduler scheduler = null;
    
+   /**
+   * Default constructor to initialize variables and create scheduler.
+   */
    public Registry()
    {
 		try
 		{
-			String name = "", id = "", courseName = "", courseCode = "", descr = "", format = "";
-			Scanner scanner;
-			Random r = new Random();
-			int random_index = 0;
+			String data = "", name = "", id = "", courseName = "", courseCode = "", descr = "", format = "";
+			Scanner scanner = null;
 			ArrayList<Student> list = new ArrayList<Student>();
+			Random r = new Random();
+			String[] stu_data = null;
+			Student stu = null;
 			
 			scanner = new Scanner(new File("students.txt"));
 			
-			while(scanner.hasNextLine() && scanner.hasNext())
+			while(scanner.hasNextLine())
 			{
-			
-				if(scanner.hasNext())
-				{
-					name = scanner.next();
-				}
+				data = scanner.nextLine().trim();
 				
-				else
+				if(!data.isEmpty())
 				{
-					throw new Exception("A name is missing from the students.txt file.");
-				}
+					stu_data = data.split("\\s+");
 				
-				if(scanner.hasNext())
-				{
-					id = scanner.next();
+					if(stu_data.length == 2)
+					{
+						name = stu_data[0];
+						id = stu_data[1];
+					}
+					
+					else
+					{
+						throw new Exception("Missing or excess information. A student's name and ID is required in the students.txt file.");
+					}
+					
+					students.put(id, new Student(name, id));
 				}
-				
-				else
-				{
-					throw new Exception("An ID is missing from the students.txt file.");
-				}
-				
-				students.add(new Student(name, id));
 			}
 			
-			Collections.sort(students);
+			stu_data = Arrays.copyOf(students.keySet().toArray(), students.size(), String[].class);
+			//Collections.sort(students); TreeMap already sorts using the keys
 			
 			scanner = new Scanner(new File("courses.txt"));
 			
@@ -57,9 +60,9 @@ public class Registry
 			{
 				if(scanner.hasNextLine())
 				{
-					courseName = scanner.nextLine();
+					courseName = scanner.nextLine().trim();
 					
-					if(courseName.trim().isEmpty())
+					if(courseName.isEmpty())
 					{
 						throw new Exception("A course name is missing from the courses.txt file.");
 					}
@@ -72,9 +75,9 @@ public class Registry
 				
 				if(scanner.hasNextLine())
 				{
-					courseCode = scanner.nextLine();
+					courseCode = scanner.nextLine().trim();
 					
-					if(courseCode.trim().isEmpty())
+					if(courseCode.isEmpty())
 					{
 						throw new Exception("A code name is missing from the courses.txt file.");
 					}
@@ -87,9 +90,9 @@ public class Registry
 				
 				if(scanner.hasNextLine())
 				{
-					descr = scanner.nextLine();
+					descr = scanner.nextLine().trim();
 					
-					if(descr.trim().isEmpty())
+					if(descr.isEmpty())
 					{
 						throw new Exception("A course description is missing from the courses.txt file.");
 					}
@@ -102,9 +105,9 @@ public class Registry
 				
 				if(scanner.hasNextLine())
 				{
-					format = scanner.nextLine();
+					format = scanner.nextLine().trim();
 					
-					if(format.trim().isEmpty())
+					if(format.isEmpty())
 					{
 						throw new Exception("A course format is missing from the courses.txt file.");
 					}
@@ -115,21 +118,23 @@ public class Registry
 					throw new Exception("A course format is missing from the courses.txt file.");
 				}
 				
-				while(list.size() < 5)
+				while(list.size() < 5) // Randomize students into courses
 				{
-					random_index = r.nextInt(students.size());
+					stu = students.get(stu_data[r.nextInt(students.size())]);
 					
-					if(!list.contains(students.get(random_index)))
+					if(!list.contains(stu))
 					{
-						list.add(students.get(random_index));
-						students.get(random_index).addCourse(courseName,courseCode,descr,format,"W2020",0);
+						list.add(stu);
+						stu.addCourse(courseName,courseCode,descr,format,"W2020",0);
 					}
 				}
 				
-				courses.add(new ActiveCourse(courseName,courseCode,descr,format,"W2020",list));
+				courses.put(courseCode, new ActiveCourse(courseName, courseCode, descr, format, "W2020", list));
 				
 				list.clear();
 			}
+			
+			scheduler = new Scheduler(courses);
 		}
 		
 		catch(Exception ex)
@@ -137,63 +142,6 @@ public class Registry
 			System.out.println(ex.getMessage());
 			System.exit(0); //Kill program since file has to be amended.
 		}
-		
-		/*// Add some students
-		// in A2 we will read from a file
-		Student s1 = new Student("JohnOliver", "34562");
-		Student s2 = new Student("HarryWindsor", "38467");
-		Student s3 = new Student("SophieBrown", "98345");
-		Student s4 = new Student("FaisalQuereshi", "57643");
-		Student s5 = new Student("GenghisKhan", "25347");
-		Student s6 = new Student("SherryTu", "46532");
-		students.add(s1);
-		students.add(s2);
-		students.add(s3);
-		students.add(s4);
-		students.add(s5);
-		students.add(s6);
-		// sort the students alphabetically - see class Student
-
-		Collections.sort(students);
-		ArrayList<Student> list = new ArrayList<Student>();
-
-		// Add some active courses with students
-		String courseName = "Computer Science II";
-		String courseCode = "CPS209";
-		String descr = "Learn how to write complex programs!";
-		String format = "3Lec 2Lab";
-		list.add(s2); list.add(s3); list.add(s4);
-		courses.add(new ActiveCourse(courseName,courseCode,descr,format,"W2020",list));
-		// Add course to student list of courses
-		s2.addCourse(courseName,courseCode,descr,format,"W2020", 0); 
-		s3.addCourse(courseName,courseCode,descr,format,"W2020", 0); 
-		s4.addCourse(courseName,courseCode,descr,format,"W2020", 0); 
-
-		// CPS511
-		list.clear();
-		courseName = "Computer Graphics";
-		courseCode = "CPS511";
-		descr = "Learn how to write cool graphics programs";
-		format = "3Lec";
-		list.add(s1); list.add(s5); list.add(s6);
-		courses.add(new ActiveCourse(courseName,courseCode,descr,format,"F2020",list));
-		s1.addCourse(courseName,courseCode,descr,format,"W2020", 0); 
-		s5.addCourse(courseName,courseCode,descr,format,"W2020", 0); 
-		s6.addCourse(courseName,courseCode,descr,format,"W2020", 0);
-
-		// CPS643
-		list.clear();
-		courseName = "Virtual Reality";
-		courseCode = "CPS643";
-		descr = "Learn how to write extremely cool virtual reality programs";
-		format = "3Lec 2Lab";
-		list.add(s1); list.add(s2); list.add(s4); list.add(s6);
-		courses.add(new ActiveCourse(courseName,courseCode,descr,format,"W2020",list));
-		s1.addCourse(courseName,courseCode,descr,format,"W2020", 0); 
-		s2.addCourse(courseName,courseCode,descr,format,"W2020", 0); 
-		s4.addCourse(courseName,courseCode,descr,format,"W2020", 0); 
-		s6.addCourse(courseName,courseCode,descr,format,"W2020", 0); */
-	   
    }
    
 	/**
@@ -211,7 +159,7 @@ public class Registry
 	   
 	   Student studentObj = new Student(name, id);
 	   
-	   for(Student student : students)
+	   for(Student student : students.values())
 	   {
 	   		if(student.equals(studentObj))
 	   		{
@@ -219,7 +167,7 @@ public class Registry
 	   		}
 	   }
 	   
-	   students.add(studentObj);
+	   students.put(id, studentObj);
 	   return true;
    }
    
@@ -233,11 +181,11 @@ public class Registry
 	   // Find student in students arraylist
 	   // If found, remove this student and return true
 	   
-	   for(Student student : students)
+	   for(Student student : students.values())
 	   {
 	   		if(student.getId().equalsIgnoreCase(studentId))
 	   		{
-	   			students.remove(student);
+	   			students.remove(student.getId());
 	   			
 	   			return true;
 	   		}
@@ -251,9 +199,9 @@ public class Registry
 	*/
    public void printAllStudents()
    {
-	   for (int i = 0; i < students.size(); i++)
+	   for(Student student : students.values())
 	   {
-		   System.out.println("ID: " + students.get(i).getId() + " Name: " + students.get(i).getName() );   
+		   System.out.println("ID: " + student.getId() + "\tName: " + student.getName());   
 	   }
 	   
    }
@@ -294,7 +242,7 @@ public class Registry
 	   
 	   boolean taken_course = false;
 	   
-	   for(Student student : students)
+	   for(Student student : students.values())
 	   {
 	   		if(student.getId().equalsIgnoreCase(studentId)) //check if student is in registry
 	   		{
@@ -310,7 +258,7 @@ public class Registry
 	   			
 	   			if(!taken_course)
 	   			{
-		   			for(ActiveCourse course : courses)
+		   			for(ActiveCourse course : courses.values())
 		   			{
 		   				if(course.getCode().equalsIgnoreCase(courseCode) && !course.checkStudentEnrollment(student))
 		   				{
@@ -359,11 +307,11 @@ public class Registry
 			}
 		}
 	   
-	   for(ActiveCourse course : courses)
+	   for(ActiveCourse course : courses.values())
 	   {
 	   		if(course.getCode().equalsIgnoreCase(courseCode))
 	   		{
-	   			for(Student student : students)
+	   			for(Student student : students.values())
 	   			{
 	   				if(student.getId().equalsIgnoreCase(studentId) && course.checkStudentEnrollment(student) && student.checkActiveCreditCourse(courseCode))
 	   				{
@@ -385,10 +333,9 @@ public class Registry
 	*/
    public void printActiveCourses()
    {
-	   for (int i = 0; i < courses.size(); i++)
+	   for(ActiveCourse course : courses.values())
 	   {
-		   ActiveCourse ac = courses.get(i);
-		   System.out.println(ac.getDescription() + "\n");
+			System.out.println(course.getDescription() + "\n");
 	   }
    }
    
@@ -417,7 +364,7 @@ public class Registry
 			}
 		}
    
-		for(ActiveCourse course : courses)
+		for(ActiveCourse course : courses.values())
 		{
 			if(course.getCode().equalsIgnoreCase(courseCode))
 			{
@@ -453,7 +400,7 @@ public class Registry
 			}
 		}
    
-	   for(ActiveCourse course : courses)
+	   for(ActiveCourse course : courses.values())
 		{
 			if(course.getCode().equalsIgnoreCase(courseCode))
 			{
@@ -488,7 +435,7 @@ public class Registry
 			}
 		}
    
-	   for(ActiveCourse course : courses)
+	   for(ActiveCourse course : courses.values())
 		{
 			if(course.getCode().equalsIgnoreCase(courseCode))
 			{
@@ -523,7 +470,7 @@ public class Registry
 			}
 		}
    
-	   	for(ActiveCourse course : courses)
+	   	for(ActiveCourse course : courses.values())
 		{
 			if(course.getCode().equalsIgnoreCase(courseCode))
 			{
@@ -540,7 +487,7 @@ public class Registry
 	*/
    public void printStudentCourses(String studentId)
    {
-	   for(Student student : students)
+	   for(Student student : students.values())
 		{
 			if(student.getId().equalsIgnoreCase(studentId))
 			{
@@ -557,7 +504,7 @@ public class Registry
 	*/
    public void printStudentTranscript(String studentId)
    {
-	   	for(Student student : students)
+	   	for(Student student : students.values())
 		{
 			if(student.getId().equalsIgnoreCase(studentId))
 			{
@@ -605,11 +552,11 @@ public class Registry
 	   	throw new Exception("Grade must be between 0.0 and 100.0");
 	   }
 	   
-	   	for(ActiveCourse course : courses)
+		for(ActiveCourse course : courses.values())
 		{
 			if(course.getCode().equalsIgnoreCase(courseCode))
 			{
-				for(Student student : students)
+				for(Student student : students.values())
 				{
 					if(student.getId().equalsIgnoreCase(studentId))
 					{
@@ -632,4 +579,197 @@ public class Registry
 			}
 		}
    }
+   
+   	/**
+   	* This method accepts the below parameters and automatically schedules the course. If no slot is available, an exception is thrown.
+   	* @param courseCode The course code.
+   	* @param duration The length of time in hours of the class.
+   	*/
+	public void setSchedule(String courseCode, int duration)
+	{
+		try
+		{
+			if(courseCode.length() != 6)
+			{
+				throw new Exception("The course code must be three letters proceeded by three numbers.");
+			}
+		
+			for(int i = 0; i < courseCode.length(); i++)
+			{
+				if(i < 3 && !Character.isLetter(courseCode.charAt(i)))
+				{
+					throw new Exception("The course code must be three letters proceeded by three numbers.");
+				}
+				
+				else
+				if(i >= 3 && !Character.isDigit(courseCode.charAt(i)))
+				{
+					throw new Exception("The course code must be three letters proceeded by three numbers.");
+				}
+			}
+			
+			if(findCourse(courseCode) == null)
+			{
+				throw new UnknownCourseException("The entered course does not exist.");
+			}
+			
+			if(duration < 1 || duration > 3)
+			{
+				throw new InvalidDurationException("The duration you have entered is not between 1 to 3 hours (inclusive).");
+			}
+			
+			scheduler.setDayAndTime(courseCode, duration);
+		}
+		
+		catch(Exception ex)
+		{
+			System.out.println(ex.getClass().getSimpleName() + ": " + ex.getMessage());
+		}
+	}
+   
+   /**
+   * This method accepts the below parameters and sets the course on the schedule.
+   * @param courseCode The course code.
+   * @param day_of_week The day of the course.
+   * @param startTime The start time of the course.
+   * @param duration The length of time in hours of the class.
+   */
+   public void setSchedule(String courseCode, String day_of_week, int startTime, int duration)
+   {
+   		try
+   		{
+	   		if(courseCode.length() != 6)
+			{
+				throw new Exception("The course code must be three letters proceeded by three numbers.");
+			}
+		
+			for(int i = 0; i < courseCode.length(); i++)
+			{
+				if(i < 3 && !Character.isLetter(courseCode.charAt(i)))
+				{
+					throw new Exception("The course code must be three letters proceeded by three numbers.");
+				}
+				
+				else
+				if(i >= 3 && !Character.isDigit(courseCode.charAt(i)))
+				{
+					throw new Exception("The course code must be three letters proceeded by three numbers.");
+				}
+			}
+			
+			if(findCourse(courseCode) == null)
+			{
+				throw new UnknownCourseException("The entered course does not exist.");
+			}
+			
+			if(!checkDay(day_of_week))
+			{
+				throw new InvalidDayException("The day you have entered is incorrect. Please see this list of valid days: Mon, Tue, Wed, Thu, Fri");
+			}
+			
+			if(duration < 1 || duration > 3)
+			{
+				throw new InvalidDurationException("The duration you have entered is not between 1 to 3 hours (inclusive).");
+			}
+			
+			if(startTime < 800 || (startTime + duration * 100 > 1700))
+			{
+				throw new InvalidTimeException("The time you have specified is invalid. Please see this list of valid times: 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600. Classes cannot exceed 1700 (5 pm).");
+			}
+			
+			scheduler.setDayAndTime(courseCode, day_of_week, startTime, duration);
+		}
+		
+		catch(Exception ex)
+		{
+			System.out.println(ex.getClass().getSimpleName() + ": " + ex.getMessage());
+		}
+   }
+   
+   /**
+   * This method accepts a course code and clears its corresponding course from the schedule.
+   * @param courseCode The course to remove.
+   */
+   public void clearSchedule(String courseCode)
+   {
+   		try
+   		{
+   			if(courseCode.length() != 6)
+			{
+				throw new Exception("The course code must be three letters proceeded by three numbers.");
+			}
+		
+			for(int i = 0; i < courseCode.length(); i++)
+			{
+				if(i < 3 && !Character.isLetter(courseCode.charAt(i)))
+				{
+					throw new Exception("The course code must be three letters proceeded by three numbers.");
+				}
+				
+				else
+				if(i >= 3 && !Character.isDigit(courseCode.charAt(i)))
+				{
+					throw new Exception("The course code must be three letters proceeded by three numbers.");
+				}
+			}
+			
+			if(findCourse(courseCode) == null)
+			{
+				throw new UnknownCourseException("The entered course does not exist.");
+			}
+			
+			scheduler.clearSchedule(courseCode);
+   		}
+   		
+   		catch(Exception ex)
+		{
+			System.out.println(ex.getClass().getSimpleName() + ": " + ex.getMessage());
+		}
+   }
+   
+   	/**
+   	* This method prints the schedule.
+   	*/
+	public void printSchedule()
+	{
+		scheduler.printSchedule();
+	}
+
+	/**
+   	* This method checks if an entered course code is valid or not.
+   	* @param courseCode The course to find.
+   	* @return The ActiveCourse if found, null if not.
+   	*/
+	private ActiveCourse findCourse(String courseCode)
+	{
+		for(String key : courses.keySet())
+		{
+			if(key.equalsIgnoreCase(courseCode))
+			{
+				return courses.get(key);
+			}
+		}
+		
+		return null;
+	}
+   
+   	/**
+   	* This method checks if an entered day is valid or not.
+   	* @param day The day to check.
+   	* @return true if valid, false if not.
+   	*/
+	private boolean checkDay(String day)
+	{
+		String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri"};
+
+		for(String ele : days)
+		{
+			if(ele.equalsIgnoreCase(day))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }

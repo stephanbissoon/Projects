@@ -11,7 +11,7 @@ public class Course
 	private String format;
 
 	/**
-	* This course constructor initializes the course code, name, description and format to blank strings.
+	* This default course constructor initializes the course code, name, description and format to blank strings.
 	*/
 	public Course()
 	{
@@ -23,6 +23,10 @@ public class Course
 
 	/**
 	* This course constructor initializes the course code, name, descrption and format to the variables that are passed as parameters.
+	* @param name The course name.
+	* @param code The course code.
+	* @param descr The course description.
+	* @param fmt The course format.
 	*/
 	public Course(String name, String code, String descr, String fmt)
 	{

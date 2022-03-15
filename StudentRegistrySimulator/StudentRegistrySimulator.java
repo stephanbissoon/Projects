@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 /**
 * This main class serves as the simulator for the registry.
@@ -86,7 +85,7 @@ public class StudentRegistrySimulator
 						continue;
 					}
 					
-					if(!isNumeric(id))
+					if(!isID(id))
 					{
 						System.out.println("The ID must only be 5 digit numeric. Please try again.");
 						continue;
@@ -124,7 +123,7 @@ public class StudentRegistrySimulator
 				
 				if(!id.isEmpty())
 				{
-					if(!isNumeric(id))
+					if(!isID(id))
 					{
 						System.out.println("The ID must only be a 5 digit numeric. Please try again.");
 						continue;
@@ -168,7 +167,7 @@ public class StudentRegistrySimulator
 			
 			if(!id.isEmpty() && !courseCode.isEmpty())
 			{
-				if(!isNumeric(id))
+				if(!isID(id))
 				{
 					System.out.println("The ID must only be a 5 digit numeric. Please try again.");
 					continue;
@@ -202,7 +201,7 @@ public class StudentRegistrySimulator
 
 			if(!id.isEmpty() && !courseCode.isEmpty())
 			{
-				if(!isNumeric(id))
+				if(!isID(id))
 				{
 					System.out.println("The ID must only be a 5 digit numeric. Please try again.");
 					continue;
@@ -263,7 +262,7 @@ public class StudentRegistrySimulator
 			{
 				id = commandLine.next();
 
-				if(!isNumeric(id))
+				if(!isID(id))
 				{
 					System.out.println("The ID must only be a 5 digit numeric. Please try again.");
 					continue;
@@ -288,7 +287,7 @@ public class StudentRegistrySimulator
 			{
 				id = commandLine.next();
 
-				if(!isNumeric(id))
+				if(!isID(id))
 				{
 					System.out.println("The ID must only be a 5 digit numeric. Please try again.");
 					continue;
@@ -329,13 +328,13 @@ public class StudentRegistrySimulator
 
 				if(!courseCode.isEmpty() && !id.isEmpty() && !grade.isEmpty())
 				{
-					if(!isNumeric(id))
+					if(!isID(id))
 					{
 						System.out.println("The ID must only be a 5 digit numeric. Please try again.");
 						continue;
 					}
 					
-					if(!isDouble(grade) && !isNumeric(grade))
+					if(!isDouble(grade))
 					{
 						System.out.println("The grade must only be numerical or decimal. Please try again.");
 						continue;
@@ -365,22 +364,98 @@ public class StudentRegistrySimulator
 				System.out.println("Missing information. Please ensure a course code is entered.");
 			}
 		  }
-		  else if (command.equalsIgnoreCase("SCI"))
-		  {
+		  
+			else if (command.equalsIgnoreCase("SCI"))
+			{
 			// get course code
 			// sort list of students in course by student id
 			// see class Registry
 			  	
-		  	if(commandLine.hasNext())
-		  	{
-				registry.sortCourseById(commandLine.next());
-		  	}
+				if(commandLine.hasNext())
+				{
+					registry.sortCourseById(commandLine.next());
+				}
 
-			else
-			{
-				System.out.println("Missing information. Please ensure a course code is entered.");
+				else
+				{
+					System.out.println("Missing information. Please ensure a course code is entered.");
+				}
 			}
-		  }
+
+			else if (command.equalsIgnoreCase("SCH"))
+			{
+				String courseCode = "";
+				String day = "";
+				String time = "";
+				String duration = "";
+				String[] commandData = commandLine.nextLine().trim().split("\\s+");
+				
+				if(commandData.length == 2)
+				{
+					courseCode = commandData[0];
+					duration = commandData[1];
+					
+					if(!isNumeric(duration))
+					{
+						System.out.println("The duration must be a numeric input.");
+						continue;
+					}
+					
+					registry.setSchedule(courseCode, Integer.parseInt(duration));
+				}
+
+				else
+				if(commandData.length == 4)
+				{
+					courseCode = commandData[0];
+					day = commandData[1];
+					time = commandData[2];
+					duration = commandData[3];
+					
+					if(!isStringOnlyAlphabet(day))
+					{
+						System.out.println("The day has illegal characters.");
+						continue;
+					}
+					
+					if(!isNumeric(time))
+					{
+						System.out.println("The time must be a numeric input.");
+						continue;
+					}
+					
+					if(!isNumeric(duration))
+					{
+						System.out.println("The duration must be a numeric input.");
+						continue;
+					}
+					
+					registry.setSchedule(courseCode, day, Integer.parseInt(time), Integer.parseInt(duration));
+				}
+
+				else
+				{
+					System.out.println("Missing or excess information. Please ensure that the course code, day, time and duration is entered for regular scheduling. Automatic scheduling requires only a course code and duration");
+				}
+			}
+			
+			else if (command.equalsIgnoreCase("CSCH"))
+			{
+				if(commandLine.hasNext())
+				{
+					registry.clearSchedule(commandLine.next());
+				}
+
+				else
+				{
+					System.out.println("Missing information. Please ensure a course code is entered.");
+				}
+			}
+			
+			else if (command.equalsIgnoreCase("PSCH"))
+			{
+				registry.printSchedule();
+			}
 		  
 		  System.out.print("\n>");
 		}
@@ -401,6 +476,11 @@ public class StudentRegistrySimulator
 	{ 
 	  // write method to check if string str contains only alphabetic characters 
 	  
+	  	if(str.isEmpty())
+		{
+			return false;
+		}
+	  
 		for(char letter : str.toCharArray())
 		{
 			if(!Character.isLetter(letter))
@@ -413,15 +493,15 @@ public class StudentRegistrySimulator
 	} 
 
 	/**
-	* This method checks if the passed string is only made up of numerical characters.
-	* @param str The string to check.
-	* @return True if the string is legal, false if not.
+	* This method checks if the passed ID is valid.
+	* @param str The ID to check.
+	* @return True if the ID is legal, false if not.
 	*/
-	public static boolean isNumeric(String str)
+	public static boolean isID(String str)
 	{
 	  // write method to check if string str contains only numeric characters
 	  
-	  	if(str.length() != 5)
+	  	if(str.length() != 5 || str.isEmpty())
 		{
 			return false;
 		}
@@ -438,6 +518,30 @@ public class StudentRegistrySimulator
 	}
 	
 	/**
+	* This method checks if the passed string is only made up of numerical characters.
+	* @param str The string to check.
+	* @return True if the string is legal, false if not.
+	*/
+	public static boolean isNumeric(String str)
+	{
+	  // write method to check if string str contains only numeric characters
+	  	if(str.isEmpty())
+		{
+			return false;
+		}
+	  
+		for(char letter : str.toCharArray())
+		{
+			if(!Character.isDigit(letter))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
+	/**
 	* This method checks if the passed string is a double number.
 	* @param str The string to check.
 	* @return True if the string is legal, false if not.
@@ -445,6 +549,11 @@ public class StudentRegistrySimulator
 	public static boolean isDouble(String str)
 	{
 		int dot_counter = 0;
+	
+		if(str.isEmpty())
+		{
+			return false;
+		}
 	
 		for(char character : str.toCharArray())
 		{

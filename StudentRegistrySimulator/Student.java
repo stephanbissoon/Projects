@@ -12,6 +12,8 @@ public class Student implements Comparable<Student>
 
 	/**
 	* This constructor initializes the name and ID variables to the parameters that are passed in. The courses are initialized to an empty list.
+	* @param name The student's name.
+	* @param id The Student's ID number.
 	*/
 	public Student(String name, String id)
 	{

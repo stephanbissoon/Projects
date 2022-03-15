@@ -11,6 +11,12 @@ public class CreditCourse extends Course
 	
 	/**
 	* This constructor initalizes the variables from the superclass and the semester and grarde variables using the parameters. The course is set to active.
+	* @param name The course name.
+	* @param code The course code.
+	* @param descr The course description.
+	* @param fmt The course format.
+	* @param semester The semester the course is being offered.
+	* @param grade The grade a student current has for the course.
 	*/
 	public CreditCourse(String name, String code, String descr, String fmt, String semester, double grade)
 	{

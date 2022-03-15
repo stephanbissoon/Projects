@@ -9,8 +9,13 @@ import java.util.Comparator;
  
 public class ActiveCourse extends Course
 {
-	private ArrayList<Student> students; 
-	private String             semester;
+	private ArrayList<Student> students = null; 
+	private String semester = "";
+
+	// Parallel ArrayLists to store the lectureStart, lectureDuration and lectureDay altogether.
+	private ArrayList<Integer> lectureStart = null;
+	private ArrayList<Integer> lectureDuration = null;
+	private ArrayList<String> lectureDay = null;
 
 	/**
 	* This constructor initializes the variables in the super class, the semester the class is being offered and the students which are enrolled into this class.
@@ -21,6 +26,9 @@ public class ActiveCourse extends Course
 		this.semester = semester;
 		this.students = new ArrayList<>();
 		this.students.addAll(students);
+		this.lectureStart = new ArrayList<>();
+		this.lectureDuration = new ArrayList<>();
+		this.lectureDay = new ArrayList<>();
 	}
 
 	/**
@@ -48,10 +56,14 @@ public class ActiveCourse extends Course
 	*/
 	public void printGrades()
 	{
+		String output = "";
+	
 		for(Student student : students)
 		{
-			System.out.println("ID: " + student.getId() + "\tName: " + student.getName() + "\tGrade: " + this.getGrade(student.getId()));
+			output += "ID: " + student.getId() + "\tName: " + student.getName() + "\t\tGrade: " + this.getGrade(student.getId()) + "\n";
 		}
+
+		System.out.println(output);
 	}
 
 	/**
@@ -82,7 +94,7 @@ public class ActiveCourse extends Course
 	*/
 	public String getDescription()
 	{
-		return super.getDescription() + "\n" + semester + "\n" + students.size();
+		return super.getDescription() + "\n" + semester + "\nEnrolment: " + students.size();
 	}
 
 
@@ -158,5 +170,40 @@ public class ActiveCourse extends Course
 		}
 		
 		return false;
+	}
+
+	/**
+	* This method adds a lecture start time, duration and day to the relevant ArrayLists.
+	* @param lectureStart The lecture time to add.
+	* @param lectureDuration The lecture duration to add.
+	* @param lectureDay The lecture day to add.
+	*/
+	public void addLectureData(int lectureStart, int lectureDuration, String lectureDay)
+	{
+		this.lectureStart.add(lectureStart);
+		this.lectureDuration.add(lectureDuration);
+		this.lectureDay.add(lectureDay);
+	}
+	
+	public int getTotalHours()
+	{
+		int total = 0;
+		
+		for(int i : lectureDuration)
+		{
+			total += i;
+		}
+		
+		return total;
+	}
+
+	/**
+	* Resets the lectureStart, lectureDuration and lectureDay ArrayLists.
+	*/
+	public void resetLectureData()
+	{
+		this.lectureStart.clear();
+		this.lectureDuration.clear();
+		this.lectureDay.clear();
 	}
 }

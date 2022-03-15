@@ -10,3 +10,11 @@ Virtual Reality
 CPS643
 Learn how to write extremely cool virtual reality programs
 3Lec 2Lab
+Computer Networks
+CPS706
+Learn about Computer Networking
+3Lec 1Lab
+Algorithms
+CPS616
+Learn about Algorithms
+3Lec 1Lab
