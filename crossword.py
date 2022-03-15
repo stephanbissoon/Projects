@@ -1,5 +1,4 @@
-# Name: Rajiv Stephan Bissoon
-# Student ID: 500954799
+# Name: Stephan Bissoon
 
 def crossword(L):
   board = [[" "] * 20 for i in range(20)] #create 20x20 board with blanks
