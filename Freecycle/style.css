@@ -1,0 +1,52 @@
+body
+{
+	background-color: whitesmoke;;
+}
+
+.error
+{
+	background-color: lightcoral;
+}
+
+.success
+{
+	background-color: lightblue;
+}
+
+textarea
+{
+	resize: vertical;
+	min-height: 75px;
+}
+
+.img
+{
+	display: inline-block;
+	margin: auto 5px auto 5px;
+	border-style: solid;
+	border-color: lightblue;
+	border-radius: 5px;
+}
+
+.img img
+{
+	width: 200px;
+	height: 250px;
+	border-radius: 5px;
+}
+
+.delete
+{
+	display: block;
+	cursor: pointer;
+}
+
+.table th, .table td 
+{
+	text-align: center;
+}
+
+p
+{
+	word-wrap: break-word;
+}
