@@ -1,6 +1,6 @@
 /**
 * Exception class that is thrown when a invalid day is entered by the user.
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
 
 public class InvalidDayException extends RuntimeException
