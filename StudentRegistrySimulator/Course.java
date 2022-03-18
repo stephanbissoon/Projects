@@ -1,6 +1,6 @@
 /**
 * The course class holds the code, name, description and format of a class
-* @author Tim McInerney & Rajiv Bissoon (500954799)
+* @author Tim McInerney & Stephan Bissoon
 */
 
 public class Course 
