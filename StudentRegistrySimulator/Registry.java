@@ -3,7 +3,7 @@ import java.io.*;
 
 /**
 * This class is the registry that holds all students and courses that are enrolled in the university.
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
 
 public class Registry
