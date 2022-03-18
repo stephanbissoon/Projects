@@ -1,6 +1,6 @@
 /**
 * Exception class that is thrown when the user enters an invalid time.
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
 
 public class InvalidTimeException extends RuntimeException
