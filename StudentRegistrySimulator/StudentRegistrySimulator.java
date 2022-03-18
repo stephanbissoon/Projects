@@ -2,7 +2,7 @@ import java.util.*;
 
 /**
 * This main class serves as the simulator for the registry.
-* @author Tim McInerney & Rajiv Bissoon (500954799)
+* @author Tim McInerney & Stephan Bissoon
 */
 
 public class StudentRegistrySimulator 
