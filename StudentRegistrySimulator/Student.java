@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 /**
 * The student class holds the information of the student that is their name, ID and courses they are currently taking and have already taken.
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
 public class Student implements Comparable<Student>
 {
