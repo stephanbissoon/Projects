@@ -1,6 +1,6 @@
 /**
 * Exception class that is thrown when an invalid duration is entered.
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
 
 public class InvalidDurationException extends RuntimeException
