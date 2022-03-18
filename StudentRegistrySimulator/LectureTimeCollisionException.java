@@ -1,6 +1,6 @@
 /**
 * Exception class that is thrown when there is a possible clash of courses in the schedule
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
 
 public class LectureTimeCollisionException extends RuntimeException
