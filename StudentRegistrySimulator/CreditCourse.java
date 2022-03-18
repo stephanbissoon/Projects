@@ -1,6 +1,6 @@
 /**
 * This class is the credit course for which a particular student is enrolled it. It is a subclass of the Course class. It holds the course's semester, grade and if it is active or not.
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
 
 public class CreditCourse extends Course
