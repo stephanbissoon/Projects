@@ -1,6 +1,6 @@
 /**
 * Exception class that is thrown when a duration might exceed the 3 hour weekly maximum.
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
 
 public class LectureDurationException extends RuntimeException
