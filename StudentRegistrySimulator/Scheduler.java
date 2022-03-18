@@ -1,6 +1,6 @@
 /**
 * This class creates and manipulates a schedule of all the courses given to it.
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
 
 import java.util.ArrayList;
