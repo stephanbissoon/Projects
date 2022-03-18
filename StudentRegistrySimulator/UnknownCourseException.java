@@ -1,6 +1,6 @@
 /**
 * Exception class that is thrown when a user enters a course that does not exist.
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
 
 public class UnknownCourseException extends RuntimeException
