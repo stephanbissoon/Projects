@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 /**
 * This class is a subclass of the Course class. It holds the students that are enrolled into a course and which semester the course is being offered.
-* @author Rajiv Bissoon 500954799
+* @author Stephan Bissoon
 */
  
 public class ActiveCourse extends Course
