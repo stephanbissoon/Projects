@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Battleship Game</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>		
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="battleship.js"></script>	
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<style>
+		#canvas-container {
+			display: flex;
+			justify-content: space-between;
+		}
+	
+		#message {
+			size: 72px;
+			color:red;
+		}
+
+		#new-game-btn, #start-game-btn, #userBattleshipCanvas {
+			display: none;
+		}
+
+		#ship-img-div {
+			height: 500px;
+			width: 500px;
+		}
+
+		#ship-img {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+			padding-top: 250px;
+			width: 15%;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>Battleship</h1>
+		<p></p>
+		<div id="canvas-container">
+			<div id="myDiv">
+				<h3>You</h3>
+				<canvas id="userBattleshipCanvas" width="500" height="500"></canvas>
+				<div id="ship-img-div">
+					<img src="ship.png" id="ship-img" draggable="true">
+				</div>
+			</div>
+		
+			<div id="opponentDiv">
+				<h3>Opponent</h3>
+				<canvas id="pcBattleshipCanvas" width="500" height="500"></canvas>
+			</div>
+		</div>
+		<button id="new-game-btn" class="btn btn-info">New Game</button>
+		<button id="start-game-btn" class="btn btn-info">Start Game</button>
+		<hr>
+		<h1 id="message"></h1>
+	</div>
+</body>
+</html>
