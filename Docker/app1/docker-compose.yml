@@ -1,0 +1,30 @@
+services:
+  app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 81:3001
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_HOST: ls-c8cc2ed3e02c6c0a00a82cca079761f5c521e23d.cdqeoq0qq4tv.ca-central-1.rds.amazonaws.com
+      MYSQL_USER: dbmasteruser
+      MYSQL_PASSWORD: CP$730TodosAppDb
+      MYSQL_DB: todos
+    networks:
+      - loadbalancing
+
+  nginx:
+    image: custom-nginx
+    ports:
+      - 80:80
+    networks:
+      - loadbalancing
+    depends_on:
+      - app
+
+networks:
+  loadbalancing:
+    name: load_balancing_ntwk
+    external: true
