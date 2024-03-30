@@ -1,0 +1,23 @@
+aws lightsail create-instances \
+--instance-names Ubuntu-1 \
+--availability-zone ca-central-1 \
+--blueprint-id ubuntu_22_04 \
+--bundle-id small_3_0
+
+aws lightsail create-instance-snapshot \
+--instance-snapshot-name todo-instance \
+--instance-name Ubuntu-1
+
+aws lightsail create-instances-from-snapshot \
+--instance-snapshot-name todo-instance \
+--instance-names {Ubuntu-2} \
+--availability-zone ca-central-1a \
+--bundle-id small_3_0
+
+aws lightsail create-load-balancer \
+--instance-port 80 \
+--load-balancer-name todo-loadbalancer
+
+aws lightsail attach-instances-to-load-balancer \
+--load-balancer-name todo-loadbalancer \
+--instance-names {"Ubuntu-1","Ubuntu-2"}

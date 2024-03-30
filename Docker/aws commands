@@ -1,0 +1,19 @@
+aws lightsail create-container-service --region ca-central-1 --service-name todos-application --power micro --scale 1
+
+aws lightsail get-container-services --region ca-central-1
+
+aws lightsail push-container-image --region ca-central-1 --service-name todos-application --label latest --image todos-app:latest
+
+aws lightsail get-container-images --region ca-central-1 --service-name todos-application
+
+aws lightsail create-container-service-deployment --region ca-central-1 --cli-input-json file://lc.json
+
+------------------------------------------
+
+aws lightsail create-instance-snapshot --instance-snapshot-name todo-instance --instance-name Ubuntu-1
+
+aws lightsail create-instances-from-snapshot --instance-snapshot-name todo-instance --instance-names Ubuntu-2 --availability-zone ca-central-1a --bundle-id small_3_0
+
+aws lightsail create-load-balancer --instance-port 80 --load-balancer-name todo-loadbalancer
+
+aws lightsail attach-instances-to-load-balancer --load-balancer-name todo-loadbalancer --instance-names {"Ubuntu-1","Ubuntu-2","Ubuntu-3"}
