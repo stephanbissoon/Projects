@@ -2,17 +2,17 @@ import mysql.connector;
 import pandas as pd;
 import matplotlib.pyplot as plt;
 
-db_url = "ls-2da50b196d26766c15d8f3f0704738df3e7bae9f.cdqeoq0qq4tv.ca-central-1.rds.amazonaws.com";
+db_url = "localhost";
 db_name = "money_motions";
-db_user = "money_motions";
-db_password = "m0n3h_m0$hunz*";
+db_user = "root";
+db_password = "password";
 
 def main():
 	dataframe = pd.read_excel("trans.xls", skiprows=[0, 1, 2])
 
 	dataframe = dataframe.drop(["Cheque", "Ending Balance", "Teller Comment"], axis=1);
 
-	val = [];
+	data = [];
 
 	for (_, row) in dataframe.iterrows():
 		date = str(row["Date"])[0:10];
@@ -23,28 +23,28 @@ def main():
 
 		split_desc = description.split();
 
-		if "CAD" in split_desc:
+		if split_desc[-1] == "CAD":
 			currency = "CAD";
 			forex_amount = split_desc[-2];
 		
-		if "USD" in split_desc:
+		if split_desc[-1] == "USD":
 			currency = "USD";
 			forex_amount = split_desc[-2];
 		
-		if split_desc[-1] == "TT":
+		if split_desc[-1] == "TTO":
 			currency = "TTD";
 			forex_amount = amount;
 
-		val.append((date, amount, description, currency, forex_amount));
+		data.append((date, amount, description, currency, forex_amount));
 
-	[print(x) for x in val]
+	[print(x) for x in data]
 
 	if(input("\nProceed to save to database? ").lower() == "yes"):
 		db = mysql.connector.connect(host=db_url, database=db_name, user=db_user, password=db_password);
 	
 		sql = "INSERT INTO transaction VALUES(NULL, %s, %s, %s, %s, %s)";
 
-		db.cursor().executemany(sql, val);
+		db.cursor().executemany(sql, data);
 		db.commit();
 		db.close();
 
