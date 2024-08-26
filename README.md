@@ -1,6 +1,9 @@
 # My Projects Over The Years
 
-**MoneyMotions (June 2024)** | *Python, Pandas, Matplotlib (Pyplot), MySQL*\
+**Electra (August 2024)** | *Java, Spring Boot, React.js, Bootstrap, Nginx, MySQL, Amazon Web Services (AWS)*\
+A previously Excel-based payroll system that reduced processing time by 80%. This project is not available on this repository as it was built for a small business. However, I do have permission to share this codebase with potential employers.
+
+**MoneyMotions (August 2024)** | *Python, Pandas, Matplotlib (Pyplot), Redis, MySQL*\
 This Python program uses Pandas to extract information from a credit card statement and displays exchange rate fluctuations using Matplotlib (Pyplot).
 
 **Nexus (April 2024)** | *Java, Spring Boot, React.js, Material UI, MySQL*\
